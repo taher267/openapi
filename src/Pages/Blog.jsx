@@ -52,6 +52,8 @@ const Blog = ({ setInput }) => {
   const submitHanlder = async (e) => {
     e.preventDefault();
     // setInput(value);
+    if (!select?.search || !select?.tone || !value?.val)
+      return window.alert(`All fields are mandatory!`);
     setResult([]);
     const result = [];
     // let clearInterv;
