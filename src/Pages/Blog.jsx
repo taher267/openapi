@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import AiFunc from '../AiFunc';
 import Loader from '../Loader';
-const topic = ['title', ' intro', 'blog'];
+// const topic = ['title', ' intro', 'blog'];
 const searchs = [
   // 'Ad copy variants',
   // 'Ad Emoji to List',
@@ -10,8 +10,8 @@ const searchs = [
   // 'Attention-Interest-Desire-Action',
   // 'Audience Refiner',
   // 'Before-After-Bridge',
-  'Birthday Card',
-  'Blog Conclusion',
+  // 'Birthday Card',
+  // 'Blog Conclusion',
   'Blog Ideas',
   'Blog Intro',
   'Blog Outline',
@@ -41,8 +41,11 @@ const tones = [
 ];
 const Blog = ({ setInput }) => {
   const [processing, setProcessing] = useState(false);
+  const [char, setChar] = useState(500);
   const [value, setValue] = useState();
+  const [value2, setValue2] = useState();
   const [result, setResult] = useState([]);
+  const [result2, setResult2] = useState([]);
   const [select, setSelect] = useState({ tone: 'friendly', search: '' });
 
   const selectHandler = ({ target: { name, value } }) => {
@@ -62,14 +65,16 @@ const Blog = ({ setInput }) => {
       //3, 4, 5
       try {
         // ${topic[item]}
-        const { data } = await AiFunc(
+        const data = await AiFunc(
           `Write a ${select?.tone || ''} and smart about ${
             select?.search || ''
           } for ` + value.val,
           //   `Write a smart, professional ${topic[item]} for ` + value.val,
           500
         );
-        const newData = data?.choices?.[0].text?.trim();
+        const res = await data.json();
+        // console.log(res);
+        const newData = res?.choices?.[0].text?.trim();
         result.push(newData);
         // setResult([newData]);
       } catch (e) {
@@ -80,7 +85,6 @@ const Blog = ({ setInput }) => {
     if (result.length === 3) {
       //   clearInterval(clearInterv);
       setResult(result);
-
       setProcessing(false);
     }
   };
@@ -130,6 +134,56 @@ const Blog = ({ setInput }) => {
           </textarea>
           <button type="submit">Submit</button>
         </form>
+        <hr />
+
+        <h4>Full user controll</h4>
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault();
+            if (!value2) return window.alert(`Please write your expectation`);
+            try {
+              // ${topic[item]}
+              const data = await AiFunc(value2, parseInt(char) || 256);
+              const res = await data.json();
+              // console.log(res);
+              const newData = res?.choices?.[0].text?.trim();
+              setResult2([newData]);
+            } catch (e) {
+              console.log(e, 'for await');
+            }
+          }}
+        >
+          <textarea
+            style={{ width: '100%' }}
+            onChange={({ target: { value } }) => {
+              setValue2(value);
+            }}
+            rows={5}
+          >
+            {value?.val}
+          </textarea>
+
+          {/* <input
+            type="number"
+            style={{ width: '100%' }}
+            onChange={({ target: { value } }) => {
+              setChar(parseInt(value));
+            }}
+            placeholder="Expected character, Number"
+          /> */}
+          <button type="submit">Submit</button>
+        </form>
+        <div>
+          <h4>Result:</h4>
+          {processing ? <Loader /> : ''}
+
+          <hr />
+          {result2?.map((res, i) => (
+            <p key={i} style={{ textAlign: 'left', padding: 20 }}>
+              {i + 1}. {res}
+            </p>
+          ))}
+        </div>
       </div>
     </div>
   );
