@@ -12,11 +12,11 @@ const searchs = [
   // 'Before-After-Bridge',
   // 'Birthday Card',
   // 'Blog Conclusion',
-  'Blog Ideas',
-  'Blog Intro',
-  'Blog Outline',
-  'Blog Title',
-  'Blog Title-Listicle',
+  // 'Blog Ideas',
+  // 'Blog Intro',
+  // 'Blog Outline',
+  // 'Blog Title',
+  // 'Blog Title-Listicle',
   // 'Brand Mission',
   // 'Brand Voice',
   // 'Bullet Point To Blog Section',
@@ -26,6 +26,16 @@ const searchs = [
   // 'Cancellation Email',
   // 'Crousel Post',
   // 'Catchy Email Subject Lines',
+
+  'Ad copy Varients',
+  'Facebook Headlines',
+  'Facebook Link Descriptions',
+  'Facebook Listicle',
+  'Facebook Primary Text',
+  'General Ad Copy',
+  'Google Descriptions',
+  'Google Headlines',
+  'LinkedIn Add Copy',
 ];
 const tones = [
   'Friendly',
@@ -39,9 +49,10 @@ const tones = [
   'Persuasive',
   'Empathetic',
 ];
-const Blog = ({ setInput }) => {
+const Blog = () => {
   const [processing, setProcessing] = useState(false);
   const [char, setChar] = useState(500);
+  const [input, setInput] = useState('');
   const [value, setValue] = useState();
   const [value2, setValue2] = useState();
   const [result, setResult] = useState([]);
@@ -58,17 +69,21 @@ const Blog = ({ setInput }) => {
     if (!select?.search || !select?.tone || !value?.val)
       return window.alert(`All fields are mandatory!`);
     setResult([]);
+
     const result = [];
     // let clearInterv;
+    let inp =
+      `Write a ${select?.tone || ''} and smart about ${
+        select?.search || ''
+      } for ` + value.val;
+    setInput(inp);
     setProcessing(true);
     for await (const item of [0, 1, 2]) {
       //3, 4, 5
       try {
         // ${topic[item]}
         const data = await AiFunc(
-          `Write a ${select?.tone || ''} and smart about ${
-            select?.search || ''
-          } for ` + value.val,
+          inp,
           //   `Write a smart, professional ${topic[item]} for ` + value.val,
           500
         );
@@ -123,6 +138,8 @@ const Blog = ({ setInput }) => {
               ))}
             </select>
           </div>
+          Input: {input}
+          <hr />
           <textarea
             style={{ width: '100%' }}
             onChange={({ target: { value } }) => {
@@ -162,7 +179,6 @@ const Blog = ({ setInput }) => {
           >
             {value?.val}
           </textarea>
-
           {/* <input
             type="number"
             style={{ width: '100%' }}

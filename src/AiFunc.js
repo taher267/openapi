@@ -1,6 +1,7 @@
 const DEFAULT_PARAMS = {
+  // prompt
   model: 'text-davinci-002',
-  temperature: 0.7,
+  temperature: 0.8,
   max_tokens: 256,
   top_p: 1,
   frequency_penalty: 0,
