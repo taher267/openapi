@@ -53,6 +53,7 @@ const Blog = () => {
   const [processing, setProcessing] = useState(false);
   const [char, setChar] = useState(500);
   const [input, setInput] = useState('');
+  const [brand, setBrand] = useState('');
   const [value, setValue] = useState();
   const [value2, setValue2] = useState();
   const [result, setResult] = useState([]);
@@ -75,7 +76,9 @@ const Blog = () => {
     let inp =
       `Write a ${select?.tone || ''} and smart about ${
         select?.search || ''
-      } for ` + value.val;
+      } for ` +
+      value.val +
+      (brand ? `of Brand ${brand}` : '');
     setInput(inp);
     setProcessing(true);
     for await (const item of [0, 1, 2]) {
@@ -140,7 +143,15 @@ const Blog = () => {
           </div>
           Input: {input}
           <hr />
+          <input
+            style={{ width: '100%' }}
+            type="text"
+            onChange={({ target: { value } }) => setBrand(value)}
+            placeholder="Brand/Optional"
+          />
+          <hr />
           <textarea
+            placeholder="Describe your expectation..."
             style={{ width: '100%' }}
             onChange={({ target: { value } }) => {
               setValue((p) => ({ id: 'B1', val: value }));
